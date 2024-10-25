@@ -22,20 +22,13 @@ class Game
     # Display the state of board
   end
 
-  def choose_word
-    # Choose the secret word from dictionary.txt
-    rndm_index = random_index_generation
+  def select_word
     fname = 'dictionary.txt'
     if file_exist?(fname)
-      array = File.readlines(fname)
-      word = array[rndm_index].chomp
+      word = select_random_word(fname)
+      return word if is_word_between_5_to_12_chars?(word)
 
-      if word.length.between?(5, 12)
-        return word
-      else
-        choose_word
-      end
-
+      choose_word
     else
       "File 'dictionary.txt' doesn't exist"
     end
@@ -45,9 +38,19 @@ class Game
     File.exist?(fname)
   end
 
+  def select_random_word(fname)
+    rndm_index = random_index_generation
+    words_array = File.readlines(fname)
+    words_array[rndm_index].chomp
+  end
+
   def random_index_generation
     random = Random.new
     random.rand(0..TOTAL_WORDS - 1)
+  end
+
+  def is_word_between_5_to_12_chars?(word)
+    word.length.between?(5, 12)
   end
 
   def guess_word

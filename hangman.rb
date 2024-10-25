@@ -2,4 +2,5 @@ require_relative 'lib/game'
 
 game = Game.new
 
-puts game.select_word
+array = Array.new(10, "_")
+game.play

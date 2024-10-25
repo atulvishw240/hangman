@@ -1,35 +1,42 @@
-# 1. Computer will choose a word
-# 2. Player gets 5 guesses to guess the word
-# 3. If player guesses the word correctly >= 5 tries THEN he wins
-# 4. If out of tries THEN player loses
 class Game
-  MAX_TRIES = 5
+  MAX_TRIES = 12
   TOTAL_WORDS = 9894
-  attr_accessor :secret_word, :input_fields
+  attr_accessor :secret_word, :input_fields, :wrong_guesses
 
   def initialize
     @secret_word = select_word
     @input_fields = Array.new(secret_word.length, "_")
+    @wrong_guesses = Array.new
   end
 
   def play
+    puts secret_word
     counter = 1
-    while counter <= MAX_TRIES
-      guess = take_player_guess
-      update_input_fields_with_player_guess(guess)
-      end_game_message(counter)
+    display(input_fields)
 
+    while counter <= MAX_TRIES
+      play_one_set(counter)
+      try_or_tries = counter == 1 ? "try" : "tries"
+      if has_player_won?
+        puts "Congrats!! You won the game in #{counter} #{try_or_tries}"
+        break
+      elsif counter == MAX_TRIES
+        puts "You lost the game!!. The secret word was #{secret_word}."
+      end
+
+      guesses_left(counter)
       counter += 1
     end
   end
 
   # ALL PRIVATE METHODS ARE BELOW
-  # private
+  private
+
   def select_word
     fname = 'dictionary.txt'
     if file_exist?(fname)
       word = select_random_word(fname)
-      return word if is_word_between_5_to_12_chars?(word)
+      return word if word_is_between_5_to_12_chars?(word)
 
       select_word
     else
@@ -52,24 +59,21 @@ class Game
     random.rand(0..TOTAL_WORDS - 1)
   end
 
-  def is_word_between_5_to_12_chars?(word)
+  def word_is_between_5_to_12_chars?(word)
     word.length.between?(5, 12)
   end
 
-  def take_player_guess
-    add_space_between_chars(input_fields)
+  def play_one_set(counter)
+    guess = take_player_guess
+    update_input_fields_with_player_guess(guess)
+    display(input_fields)
+    display_wrong_guesses(guess)
     one_line_space
+  end
+
+  def take_player_guess
     print "Enter your guess: "
     gets[0].downcase.chomp
-  end
-
-  # Display 'owl' as o w l
-  def add_space_between_chars(array)
-    puts array.join(' ')
-  end
-
-  def one_line_space
-    puts ""
   end
 
   def update_input_fields_with_player_guess(guess)
@@ -80,16 +84,27 @@ class Game
     end
   end
 
-  def end_game_message(counter)
-    try_or_tries = counter == 1 ? "try" : "tries"
-    if has_player_won?
-      puts "Congrats!! You won the game in #{counter} #{try_or_tries}"
-    elsif counter == 5
-      puts "You lost the game!!. The secret word was #{secret_word}."
-    end
+  # Display 'owl' as o w l
+  def display(array)
+    puts array.join(' ')
+  end
+
+  def display_wrong_guesses(guess)
+    wrong_guesses << guess unless secret_word.include?(guess)
+    wrong_guesses_string = wrong_guesses.uniq.join(', ')
+    puts "Wrong guesses: #{wrong_guesses_string}"
+  end
+
+  def guesses_left(counter)
+    puts "You have #{MAX_TRIES - counter} guesses left"
+  end
+
+  def one_line_space
+    puts ""
   end
 
   def has_player_won?
-    input_fields == secret_word
+    input = input_fields.join('')
+    input == secret_word
   end
 end

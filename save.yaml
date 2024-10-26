@@ -1,17 +1,14 @@
 ---
-:secret_word: visibility
+:secret_word: cyprus
 :input_fields:
-- v
-- i
+- c
 - _
-- i
+- p
 - _
-- i
-- _
-- i
 - _
 - _
 :wrong_guesses:
-- a
-- e
-- o
+- t
+- k
+- m
+- "n"

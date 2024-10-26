@@ -18,26 +18,47 @@ class Game
   end
 
   def play
-    counter = times
+    no_of_tries = times
     puts secret_word
     display(input_fields)
-    space_between_lines(1)
 
-    while counter <= MAX_TRIES
+    while no_of_tries <= MAX_TRIES
       play_one_set
-      try_or_tries = counter == 1 ? "try" : "tries"
-      if has_player_won?
-        puts "Congrats!! You won the game in #{counter} #{try_or_tries}"
-        break
-      elsif counter == MAX_TRIES
-        puts "You lost the game!!. The secret word was #{secret_word}."
-      end
-
-      guesses_left(counter)
-      space_between_lines(2)
-      counter += 1
-
+      input = won_or_lost?(no_of_tries)
+      break if input == 1 || input == 2
+      guesses_left(no_of_tries)
+      no_of_tries += 1
     end
+
+    message(no_of_tries)
+  end
+
+  def message(tries)
+    return_code = won_or_lost?(tries)
+    ending_message(return_code, tries)
+  end
+
+  def won_or_lost?(tries)
+    return 1 if has_player_won?
+    return 2 if has_player_lost?(tries)
+  end
+
+  def has_player_lost?(total_tries)
+    return true if total_tries == MAX_TRIES
+  end
+
+  def ending_message(input, counter)
+    winning_message(counter) if input == 1
+    losing_message if input == 2
+  end
+
+  def winning_message(counter)
+    try_or_tries = counter == 1 ? "try" : "tries"
+    puts "Congrats!! You won the game in #{counter} #{try_or_tries}"
+  end
+
+  def losing_message
+    puts "You lost the game!!. The secret word was #{secret_word}."
   end
 
   # ALL PRIVATE METHODS ARE BELOW
@@ -89,6 +110,7 @@ class Game
   # Display 'owl' as o w l
   def display(array)
     puts array.join(' ')
+    space_between_lines(1)
   end
 
   def display_wrong_guesses(guess)
@@ -99,6 +121,8 @@ class Game
 
   def guesses_left(counter)
     puts "You have #{MAX_TRIES - counter} guesses left"
+    puts "--------------X--------------X--------------X--------------X--------------X--------------X--------------X--------------X--------------X"
+    space_between_lines(2)
   end
 
   def space_between_lines(space)
@@ -125,9 +149,6 @@ class Game
       load_existing_game
     elsif choice == 2
       self.play
-    else
-      puts "Incorrect input try again."
-      select_game_based_on_choice
     end
   end
 

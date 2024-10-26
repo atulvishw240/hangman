@@ -1,15 +1,17 @@
 ---
-:secret_word: replaced
+:secret_word: visibility
 :input_fields:
+- v
+- i
 - _
-- e
+- i
 - _
+- i
 - _
-- a
+- i
 - _
-- e
 - _
 :wrong_guesses:
-- i
+- a
+- e
 - o
-- u

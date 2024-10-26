@@ -1,35 +1,42 @@
 require 'yaml'
 
 class Game
-  MAX_TRIES = 5
+  MAX_TRIES = 10
   TOTAL_WORDS = 9894
-  attr_accessor :secret_word, :input_fields, :wrong_guesses
+  attr_accessor :secret_word, :input_fields, :wrong_guesses, :times
 
   def initialize
     @secret_word = select_word
     @input_fields = Array.new(secret_word.length, "_")
     @wrong_guesses = Array.new
+    @times = 0
+  end
+
+  def choose_which_game_to_play
+    choice = play_existing_or_new_game
+    select_game_based_on_choice(choice)
   end
 
   def play
+    counter = times
     puts secret_word
     display(input_fields)
     one_line_space
-    counter = 1
+    # counter = 1
 
-    while counter <= MAX_TRIES
-      play_one_set(counter)
+    while counter < MAX_TRIES
+      play_one_set
       try_or_tries = counter == 1 ? "try" : "tries"
       if has_player_won?
-        puts "Congrats!! You won the game in #{counter} #{try_or_tries}"
+        puts "Congrats!! You won the game in #{counter + 1} #{try_or_tries}"
         break
-      elsif counter == MAX_TRIES
+      elsif counter == MAX_TRIES - 1
         puts "You lost the game!!. The secret word was #{secret_word}."
       end
 
+      counter += 1
       guesses_left(counter)
       one_line_space
-      counter += 1
     end
   end
 
@@ -59,7 +66,7 @@ class Game
     word.length.between?(5, 12)
   end
 
-  def play_one_set(counter)
+  def play_one_set
     guess = take_player_guess
     update_input_fields_with_player_guess(guess)
     display(input_fields)
@@ -116,20 +123,22 @@ class Game
       load_existing_game
     elsif choice == 2
       self.play
+    else
+      puts "Incorrect input try again."
+      select_game_based_on_choice
     end
   end
 
+  public
   def load_existing_game
     data = YAML.load_file("save.yaml")
     @secret_word = data[:secret_word]
     @input_fields = data[:input_fields]
     @wrong_guesses = data[:wrong_guesses]
-    puts data.inspect
 
-    counter = wrong_guesses.length + (input_fields.uniq.length - 1)
-    puts counter
-    
-    self.play(counter)
+    counter = wrong_guesses.length + (input_fields.uniq.length - 1)    
+    self.times = counter
+    self.play
   end
 
   def to_yaml

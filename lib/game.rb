@@ -1,5 +1,7 @@
+require 'yaml'
+
 class Game
-  MAX_TRIES = 12
+  MAX_TRIES = 5
   TOTAL_WORDS = 9894
   attr_accessor :secret_word, :input_fields, :wrong_guesses
 
@@ -11,8 +13,9 @@ class Game
 
   def play
     puts secret_word
-    counter = 1
     display(input_fields)
+    one_line_space
+    counter = 1
 
     while counter <= MAX_TRIES
       play_one_set(counter)
@@ -25,6 +28,7 @@ class Game
       end
 
       guesses_left(counter)
+      one_line_space
       counter += 1
     end
   end
@@ -34,18 +38,10 @@ class Game
 
   def select_word
     fname = 'dictionary.txt'
-    if file_exist?(fname)
-      word = select_random_word(fname)
-      return word if word_is_between_5_to_12_chars?(word)
+    word = select_random_word(fname)
+    return word if word_is_between_5_to_12_chars?(word)
 
-      select_word
-    else
-      "File 'dictionary.txt' doesn't exist"
-    end
-  end
-
-  def file_exist?(fname)
-    File.exist?(fname)
+    select_word
   end
 
   def select_random_word(fname)
@@ -68,7 +64,6 @@ class Game
     update_input_fields_with_player_guess(guess)
     display(input_fields)
     display_wrong_guesses(guess)
-    one_line_space
   end
 
   def take_player_guess
@@ -106,5 +101,52 @@ class Game
   def has_player_won?
     input = input_fields.join('')
     input == secret_word
+  end
+
+  def play_existing_or_new_game
+    print_message("1) Enter '1' to load an existing game")
+    print_message("2) Enter '2' to play a new game")
+    one_line_space
+    print_message("Enter your choice: ")
+    gets.chomp.to_i
+  end
+
+  def select_game_based_on_choice(choice)
+    if choice == 1
+      load_existing_game
+    elsif choice == 2
+      self.play
+    end
+  end
+
+  def load_existing_game
+    data = YAML.load_file("save.yaml")
+    @secret_word = data[:secret_word]
+    @input_fields = data[:input_fields]
+    @wrong_guesses = data[:wrong_guesses]
+    puts data.inspect
+
+    counter = wrong_guesses.length + (input_fields.uniq.length - 1)
+    puts counter
+    
+    self.play(counter)
+  end
+
+  def to_yaml
+    YAML.dump({
+      :secret_word => @secret_word,
+      :input_fields => @input_fields,
+      :wrong_guesses => @wrong_guesses
+    })
+  end
+
+  def save_game(string)
+    game_file = File.new("save.yaml", "w")
+    game_file.write(string)
+    game_file.close
+  end
+
+  def print_message(string)
+    puts string
   end
 end

@@ -9,7 +9,7 @@ class Game
     @secret_word = select_word
     @input_fields = Array.new(secret_word.length, "_")
     @wrong_guesses = Array.new
-    @times = 0
+    @times = 1
   end
 
   def choose_which_game_to_play
@@ -21,22 +21,22 @@ class Game
     counter = times
     puts secret_word
     display(input_fields)
-    one_line_space
-    # counter = 1
+    space_between_lines(1)
 
-    while counter < MAX_TRIES
+    while counter <= MAX_TRIES
       play_one_set
       try_or_tries = counter == 1 ? "try" : "tries"
       if has_player_won?
-        puts "Congrats!! You won the game in #{counter + 1} #{try_or_tries}"
+        puts "Congrats!! You won the game in #{counter} #{try_or_tries}"
         break
-      elsif counter == MAX_TRIES - 1
+      elsif counter == MAX_TRIES
         puts "You lost the game!!. The secret word was #{secret_word}."
       end
 
-      counter += 1
       guesses_left(counter)
-      one_line_space
+      space_between_lines(2)
+      counter += 1
+
     end
   end
 
@@ -101,8 +101,10 @@ class Game
     puts "You have #{MAX_TRIES - counter} guesses left"
   end
 
-  def one_line_space
-    puts ""
+  def space_between_lines(space)
+    space.times do
+      puts ""
+    end
   end
 
   def has_player_won?
@@ -113,8 +115,8 @@ class Game
   def play_existing_or_new_game
     print_message("1) Enter '1' to load an existing game")
     print_message("2) Enter '2' to play a new game")
-    one_line_space
-    print_message("Enter your choice: ")
+    space_between_lines(1)
+    print "Enter your choice: "
     gets.chomp.to_i
   end
 
@@ -136,7 +138,7 @@ class Game
     @input_fields = data[:input_fields]
     @wrong_guesses = data[:wrong_guesses]
 
-    counter = wrong_guesses.length + (input_fields.uniq.length - 1)    
+    counter = wrong_guesses.length + input_fields.uniq.length
     self.times = counter
     self.play
   end

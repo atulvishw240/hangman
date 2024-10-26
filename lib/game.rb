@@ -96,7 +96,11 @@ class Game
 
   def take_player_guess
     print "Enter your guess: "
-    gets[0].downcase.chomp
+    guess = gets[0].downcase.chomp
+    return guess if (!wrong_guesses.include?(guess) && !input_fields.include?(guess))
+
+    puts "You've already guessed it once. Guess something different"
+    take_player_guess
   end
 
   def update_input_fields_with_player_guess(guess)

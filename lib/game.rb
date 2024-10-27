@@ -54,7 +54,6 @@ class Game
   end
 
   def play
-    puts secret_word
     display(input_fields)
     no_of_tries = times
   

@@ -18,19 +18,36 @@ class Game
   end
 
   def play
-    no_of_tries = times
     puts secret_word
     display(input_fields)
-
+    no_of_tries = times
+  
     while no_of_tries <= MAX_TRIES
+
       play_one_set
       input = won_or_lost?(no_of_tries)
       break if input == 1 || input == 2
       guesses_left(no_of_tries)
+
+      save = save_or_continue
+      if save == "y"
+        save_game(self.to_yaml)
+        break
+      end
+
       no_of_tries += 1
     end
 
     message(no_of_tries)
+  end
+
+  def save_or_continue
+    print_message("If you want to save the game then press 'Y' otherwise press any other key to continue")
+    user_choice = gets.downcase.chomp
+    print_message("--------------X--------------X--------------X--------------X--------------X--------------X--------------X--------------X--------------X")
+    space_between_lines(2)
+    
+    user_choice
   end
 
   def message(tries)
@@ -125,8 +142,7 @@ class Game
 
   def guesses_left(counter)
     puts "You have #{MAX_TRIES - counter} guesses left"
-    puts "--------------X--------------X--------------X--------------X--------------X--------------X--------------X--------------X--------------X"
-    space_between_lines(2)
+    space_between_lines(1)
   end
 
   def space_between_lines(space)
@@ -156,7 +172,6 @@ class Game
     end
   end
 
-  public
   def load_existing_game
     data = YAML.load_file("save.yaml")
     @secret_word = data[:secret_word]

@@ -1,14 +1,12 @@
 ---
-:secret_word: cyprus
+:secret_word: delay
 :input_fields:
-- c
 - _
-- p
+- e
 - _
-- _
+- a
 - _
 :wrong_guesses:
-- t
-- k
-- m
-- "n"
+- i
+- o
+- u

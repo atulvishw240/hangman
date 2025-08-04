@@ -6,6 +6,23 @@ class UI
     @game = game
   end
 
+  def start
+    while game.lives > 0
+      display
+      guess = make_guess
+      game.update(guess)
+
+      if game.won?
+        winning_message
+        return
+      end
+
+      game.lives = game.lives - 1
+    end
+
+    losing_message
+  end
+
   def display
     puts game.input_fields.join(' ')
     puts "Wrong guesses: #{game.wrong_guesses.join(', ')}"
@@ -17,8 +34,6 @@ class UI
     guess = gets.chomp
 
     return guess if valid?(guess)
-
-    raise "You have made an incorrect guess, Try again!!"
 
     make_guess
   end
@@ -33,6 +48,6 @@ class UI
   end
 
   def losing_message
-    "You are out of tries!! Better luck next time."
+    "You are out of tries!! Better luck next time. The code was #{game.word}"
   end
 end

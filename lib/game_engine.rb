@@ -2,7 +2,7 @@
 class GameEngine
   attr_accessor :word, :input_fields, :wrong_guesses, :lives
 
-  def initialize(word, input_fields, wrong_guesses, lives)
+  def initialize(word, input_fields, wrong_guesses, lives = 10)
     @word = word
     @input_fields = input_fields
     @wrong_guesses = wrong_guesses

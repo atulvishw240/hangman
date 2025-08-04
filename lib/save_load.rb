@@ -12,8 +12,9 @@ class SaveLoad
   end
  
   def load_state(new_or_saved)
-    new_state if new_or_saved == 1
-    load_existing_state if new_or_saved == 2
+    return new_state if new_or_saved == 1
+
+    return load_existing_state if new_or_saved == 2
   end
 
   # PRIVATE METHODS

@@ -34,6 +34,12 @@ class UI
 
     while game.lives > 0
       guess = make_guess
+  
+      if guess == "save"
+        save_or_load.save_game_state(game)
+        return
+      end
+
       game.update(guess)
 
       if game.won?
@@ -55,7 +61,7 @@ class UI
   end
 
   def make_guess
-    print "Enter your guess: "
+    print "Enter your guess (a-z) or 'save' to save the game: "
     guess = gets.chomp
 
     return guess if valid?(guess)
@@ -64,8 +70,8 @@ class UI
   end
 
   def valid?(guess)
-    /[a-z]/.match?(guess) && guess.length == 1 && !game.input_fields.include?(guess) &&
-    !game.wrong_guesses.include?(guess)
+    (/[a-z]/.match?(guess) && guess.length == 1 && !game.input_fields.include?(guess) &&
+    !game.wrong_guesses.include?(guess)) || guess == "save"
   end
 
   def winning_message

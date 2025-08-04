@@ -1,0 +1,48 @@
+require "yaml"
+require_relative "game_engine"
+require_relative "utility"
+
+class SaveLoad
+
+  def save_game_state(game)
+    string = to_yaml(game)
+    game_file = File.new("save.yaml", "w")
+    game_file.write(string)
+    game_file.close
+  end
+ 
+  def load_state(new_or_saved)
+    new_state if new_or_saved == 1
+    load_existing_state if new_or_saved == 2
+  end
+
+  # PRIVATE METHODS
+  private
+
+  def to_yaml(game)
+    YAML.dump({
+      :word => game.word,
+      :input_fields => game.input_fields,
+      :wrong_guesses => game.wrong_guesses,
+      :lives => game.lives
+    })
+  end
+
+  def new_state
+    word = Utility.select_word
+    input_fields = Array.new(word.length, "_")
+    wrong_guesses = Array.new
+
+    GameEngine.new(word, input_fields, wrong_guesses)
+  end
+
+  def load_existing_state
+    data = YAML.load_file("save.yaml")
+    word = data[:word]
+    input_fields = data[:input_fields]
+    wrong_guesses = data[:wrong_guesses]
+    lives = data[:lives]
+
+    GameEngine.new(word, input_fields, wrong_guesses, lives)
+  end
+end

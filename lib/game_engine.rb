@@ -17,13 +17,17 @@ class GameEngine
     end
   end
 
+  def won?
+    word.chars == input_fields
+  end
+
+
+  # PRIVATE METHODS
+  private
+
   def update_input_fields(letter)
     word.chars.each_with_index do |char, index|
       input_fields[index] = letter if char == letter
     end
-  end
-
-  def won?
-    word.chars == input_fields
   end
 end

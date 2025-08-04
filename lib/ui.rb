@@ -25,6 +25,10 @@ class UI
     puts losing_message
   end
 
+
+  # PRIVATE METHODS
+  private
+  
   def display
     puts game.input_fields.join(' ')
     puts "Wrong guesses: #{game.wrong_guesses.join(', ')}"

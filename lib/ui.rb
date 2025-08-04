@@ -7,20 +7,22 @@ class UI
   end
 
   def start
+    display
+
     while game.lives > 0
-      display
       guess = make_guess
       game.update(guess)
+      display
 
       if game.won?
-        winning_message
+        puts winning_message
         return
       end
 
       game.lives = game.lives - 1
     end
 
-    losing_message
+    puts losing_message
   end
 
   def display

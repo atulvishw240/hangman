@@ -1,12 +1,35 @@
 class UI
   MAX_TRIES = 10
-  attr_reader :game
+  attr_accessor :game, :save_or_load
 
-  def initialize(game)
-    @game = game
+  def initialize(save_or_load)
+    @save_or_load = save_or_load
   end
 
   def start
+    choice = new_or_saved
+    game_state = save_or_load.load_state(choice)
+    self.game = game_state
+    play
+  end
+
+
+
+  # PRIVATE METHODS
+  private
+
+  def new_or_saved
+    puts "1) New Game"
+    puts "2) Saved Game"
+    print "Enter your choice (1 or 2): "
+    choice = gets.chomp.to_i
+
+    return choice if choice == 1 || choice == 2
+
+    new_or_saved
+  end
+
+  def play
     display
 
     while game.lives > 0
@@ -24,10 +47,6 @@ class UI
 
     puts losing_message
   end
-
-
-  # PRIVATE METHODS
-  private
   
   def display
     puts game.input_fields.join(' ')

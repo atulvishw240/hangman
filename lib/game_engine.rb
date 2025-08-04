@@ -1,11 +1,12 @@
 # Contains Game Logic
 class GameEngine
-  attr_accessor :word, :input_fields, :wrong_guesses
+  attr_accessor :word, :input_fields, :wrong_guesses, :lives
 
-  def initialize(word, input_fields, wrong_guesses)
+  def initialize(word, input_fields, wrong_guesses, lives)
     @word = word
     @input_fields = input_fields
     @wrong_guesses = wrong_guesses
+    @lives = lives
   end
 
   def update(letter)

@@ -15,4 +15,8 @@ class GameEngine
       wrong_guesses << letter
     end
   end
+
+  def won?
+    word.chars.uniq.size == correct_guesses.uniq.size
+  end
 end

@@ -1,5 +1,5 @@
 ---
-:secret_word: essay
+:word: essay
 :input_fields:
 - e
 - s
@@ -10,3 +10,4 @@
 - i
 - o
 - u
+:lives: 3

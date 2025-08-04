@@ -12,7 +12,6 @@ class UI
     while game.lives > 0
       guess = make_guess
       game.update(guess)
-      display
 
       if game.won?
         puts winning_message
@@ -20,6 +19,7 @@ class UI
       end
 
       game.lives = game.lives - 1
+      display
     end
 
     puts losing_message

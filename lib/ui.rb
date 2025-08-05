@@ -1,14 +1,14 @@
 class UI
   MAX_TRIES = 10
-  attr_accessor :game, :save_or_load
+  attr_accessor :game, :serializer
 
-  def initialize(save_or_load)
-    @save_or_load = save_or_load
+  def initialize(serializer)
+    @serializer = serializer
   end
 
   def start
     choice = new_or_saved
-    game_state = save_or_load.load_state(choice)
+    game_state = serializer.load_state(choice)
     self.game = game_state
     play
   end
@@ -24,9 +24,13 @@ class UI
     print "Enter your choice (1 or 2): "
     choice = gets.chomp.to_i
 
-    return choice if choice == 1 || choice == 2
+    return choice if choice_valid?(choice)
 
     new_or_saved
+  end
+
+  def choice_valid?(choice)
+    choice == 1 || choice == 2
   end
 
   def play
@@ -36,7 +40,7 @@ class UI
       guess = make_guess
   
       if guess == "save"
-        save_or_load.save_game_state(game)
+        serializer.save_game_state(game)
         return
       end
 
@@ -64,12 +68,12 @@ class UI
     print "Enter your guess (a-z) or 'save' to save the game: "
     guess = gets.chomp
 
-    return guess if valid?(guess)
+    return guess if guess_valid?(guess)
 
     make_guess
   end
 
-  def valid?(guess)
+  def guess_valid?(guess)
     (/[a-z]/.match?(guess) && guess.length == 1 && !game.input_fields.include?(guess) &&
     !game.wrong_guesses.include?(guess)) || guess == "save"
   end
@@ -79,6 +83,6 @@ class UI
   end
 
   def losing_message
-    "You are out of tries!! Better luck next time. The code was #{game.word}"
+    "You are out of tries!! Better luck next time. The code was #{game.word.join}"
   end
 end

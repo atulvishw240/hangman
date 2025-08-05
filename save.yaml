@@ -1,13 +1,21 @@
 ---
-:word: essay
-:input_fields:
+:word:
+- p
 - e
-- s
-- s
-- a
+- r
+- t
+- h
+:input_fields:
+- p
+- e
+- _
+- _
 - _
 :wrong_guesses:
+- a
 - i
 - o
 - u
-:lives: 3
+- m
+- "n"
+:lives: 2

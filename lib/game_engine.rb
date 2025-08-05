@@ -13,7 +13,7 @@ class GameEngine
     if word.include?(letter)
       update_input_fields(letter)
     else
-      wrong_guesses << letter
+      update_wrong_guesses(letter)
     end
   end
 
@@ -29,5 +29,9 @@ class GameEngine
     word.chars.each_with_index do |char, index|
       input_fields[index] = letter if char == letter
     end
+  end
+
+  def update_wrong_guesses(letter)
+    wrong_guesses << letter
   end
 end

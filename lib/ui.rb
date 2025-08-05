@@ -83,6 +83,6 @@ class UI
   end
 
   def losing_message
-    "You are out of tries!! Better luck next time. The code was #{game.word.join}"
+    "You are out of tries!! Better luck next time. The code was #{game.word}"
   end
 end

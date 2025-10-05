@@ -1,6 +1,7 @@
 # Contains Game Logic
 class GameEngine
-  attr_accessor :word, :input_fields, :wrong_guesses, :lives
+  attr_reader :word
+  attr_accessor :input_fields, :wrong_guesses, :lives
 
   def initialize(word, input_fields, wrong_guesses, lives = 10)
     @word = word

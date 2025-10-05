@@ -70,6 +70,7 @@ class UI
 
     return guess if guess_valid?(guess)
 
+    puts "Incorrect guess, Try again!!"
     make_guess
   end
 

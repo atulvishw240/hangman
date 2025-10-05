@@ -21,12 +21,6 @@ class SaveLoad
   private
 
   def to_yaml(game)
-    # YAML.dump({
-    #   :word => game.word,
-    #   :input_fields => game.input_fields,
-    #   :wrong_guesses => game.wrong_guesses,
-    #   :lives => game.lives
-    # })
     YAML.dump(game)
   end
 
@@ -39,13 +33,6 @@ class SaveLoad
   end
 
   def load_existing_state
-    # data = YAML.load_file("save.yaml")
-    # word = data[:word]
-    # input_fields = data[:input_fields]
-    # wrong_guesses = data[:wrong_guesses]
-    # lives = data[:lives]
-
-    # GameEngine.new(word, input_fields, wrong_guesses, lives)
     YAML.load_file("save.yaml", permitted_classes: [GameEngine])
   end
 end
